@@ -2,11 +2,12 @@ import 'dotenv/config';
 import { ExpoConfig } from '@expo/config-types';
 
 const config: ExpoConfig = {
-  name: 'onfit',
+  name: 'ONFIT NUTRITION',
   slug: 'onfit',
   version: '1.0.0',
   scheme: 'onfit',
   platforms: ['ios', 'android', 'web'],
+  userInterfaceStyle: 'automatic',
   extra: {
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseAnon: process.env.SUPABASE_ANON_KEY,
