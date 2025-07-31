@@ -1,6 +1,6 @@
 {
   "private": true,
-  "workspaces": ["apps/*"],
+  "workspaces": ["apps/*", "packages/*"],
   "resolutions": {
     "metro": "0.80.5",
     "metro-source-map": "0.80.5",

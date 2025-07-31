@@ -1,0 +1,11 @@
+{
+  "name": "@onfit/ui",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./db.types": "./db.types.ts"
+  }
+}

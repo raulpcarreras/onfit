@@ -3,7 +3,7 @@ create extension if not exists "pgcrypto";
 create extension if not exists "pgjwt";
 
 -- 2. Tabla de perfiles (datos extra del usuario)
-create table public.profiles (
+create table if not exists public.profiles (
   id uuid primary key references auth.users on delete cascade,
   display_name text,
   avatar_url text,
@@ -11,7 +11,7 @@ create table public.profiles (
 );
 
 -- 3. Cursos y módulos
-create table public.courses (
+create table if not exists public.courses (
   id serial primary key,
   title text not null,
   description text,
@@ -19,7 +19,7 @@ create table public.courses (
   created_at timestamptz default now()
 );
 
-create table public.modules (
+create table if not exists public.modules (
   id serial primary key,
   course_id integer references public.courses on delete cascade,
   title text,
@@ -29,7 +29,7 @@ create table public.modules (
 );
 
 -- 4. Progreso del usuario
-create table public.progress (
+create table if not exists public.progress (
   user_id uuid references public.profiles on delete cascade,
   module_id integer references public.modules on delete cascade,
   completed boolean default false,
@@ -38,7 +38,7 @@ create table public.progress (
 );
 
 -- 5. Pagos (Stripe)
-create table public.payments (
+create table if not exists public.payments (
   id serial primary key,
   user_id uuid references public.profiles on delete cascade,
   stripe_session_id text unique,
@@ -54,13 +54,16 @@ alter table public.progress  enable row level security;
 alter table public.payments  enable row level security;
 
 -- 6a. Política: cada usuario sólo ve/edita su propio perfil
+drop policy if exists "Own profile" on public.profiles;
 create policy "Own profile" on public.profiles
   for all using (auth.uid() = id);
 
 -- 6b. Política: cada usuario sólo ve/edita su progreso
+drop policy if exists "Own progress" on public.progress;
 create policy "Own progress" on public.progress
   for all using (auth.uid() = user_id);
 
 -- 6c. Política: cada usuario sólo ve/edita sus pagos
+drop policy if exists "Own payments" on public.payments;
 create policy "Own payments" on public.payments
   for all using (auth.uid() = user_id);
